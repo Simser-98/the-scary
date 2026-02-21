@@ -12,8 +12,6 @@ def main():
 
     player = Player()
 
-    player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
-
     while running:
         # poll for events
         # pygame.QUIT event means the user clicked X to close your window
@@ -22,12 +20,10 @@ def main():
                 running = False
 
         # fill the screen with a color to wipe away anything from last frame
-        screen.fill("purple")
-
-        pygame.draw.circle(screen, "red", player_pos, 40)
+        screen.fill("black")
 
         keys = pygame.key.get_pressed()
-        player.tick(keys, delta_time)
+        player.tick(keys, delta_time, screen)
 
         # flip() the display to put your work on screen
         pygame.display.flip()

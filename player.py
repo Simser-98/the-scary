@@ -1,9 +1,13 @@
 import pygame
 
-from object import *
+
+def draw(screen):
+    pygame.draw.circle(screen, "white",
+                       (screen.get_width() / 2, screen.get_height() / 2),
+                       40)
 
 
-class Player(Object):
+class Player:
     def __init__(self):
         super().__init__()
         self._worldPos = pygame.Vector2(0, 0)
@@ -11,7 +15,7 @@ class Player(Object):
     def get_pos(self):
         return self._worldPos
 
-    def tick(self, keys, delta_time):
+    def tick(self, keys, delta_time, screen):
         if keys[pygame.K_w]:
             self._worldPos.y -= 1 * delta_time
         if keys[pygame.K_s]:
@@ -20,4 +24,5 @@ class Player(Object):
             self._worldPos.x -= 1 * delta_time
         if keys[pygame.K_d]:
             self._worldPos.x += 1 * delta_time
-        print(self._worldPos)
+
+        draw(screen)
