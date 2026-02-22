@@ -1,13 +1,14 @@
 import pygame
-
+import csv
 from prop import Prop
 
 
 class World:
-    def __init__(self, game):
+    def __init__(self, game, floor):
         self.game = game
         self.walls = []
         self.props = []
+        self.floor = floor
 
     def get_collisions(self):
         """returns a list of all the walls and props in the world for collision detection"""
@@ -16,14 +17,18 @@ class World:
 
     def setup(self):
         """sets up the world with walls and props"""
-        self.walls.append(pygame.Rect(0, 0, 800, 20))
-        self.walls.append(pygame.Rect(0, 580, 800, 20))
-        self.walls.append(pygame.Rect(0, 0, 20, 600))
-        self.walls.append(pygame.Rect(780, 0, 20, 600))
+        with open(self.floor, "r") as f:
 
-        self.props.append(Prop(pygame.Vector2(200, 200), pygame.Vector2(50, 50)))
-        self.props.append(Prop(pygame.Vector2(400, 300), pygame.Vector2(100, 100)))
-        self.props.append(Prop(pygame.Vector2(600, 400), pygame.Vector2(75, 75)))
+            csv_reader = csv.reader(f)
+            # skips header row
+            next(csv_reader, None)
+
+            for row in csv_reader:
+                if "wall" in row[0]:
+                    self.walls.append(pygame.Rect(float(row[1]), float(row[2]), float(row[3]), float(row[4])))
+                else:
+                    self.props.append(Prop(pygame.Vector2(float(row[1]), float(row[2])),pygame.Vector2(float(row[3]), float(row[4]))))
+                print(row)
 
     def draw(self, player_pos):
         screen = self.game.get_screen()
