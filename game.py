@@ -10,6 +10,7 @@ class Game:
         """initializes pygame and sets up the game window and clock"""
         pygame.init()
         self.screen = pygame.display.set_mode((800, 600))
+
         self.clock = pygame.time.Clock()
         self.running = True
         self.deltaTime = 0
@@ -18,6 +19,9 @@ class Game:
         self.player = Player(self)
         self.floor1 = World(self, "floors/floor_1.csv")
         self.floor1.setup()
+
+        self.dark_background = self.make_dark_background()
+        self.light_mask = self.make_light_mask(2)
 
     def get_screen(self):
         """getter for the screen surface"""
@@ -34,6 +38,24 @@ class Game:
     def get_keys(self):
         """getter for the current state of the keyboard"""
         return self.keys
+
+    def make_dark_background(self, alpha=255):
+        """creates a dark background surface with the specified alpha value"""
+        surface = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA).convert_alpha()
+        surface.fill((0, 0, 0))
+        return surface
+
+    def make_light_mask(self, radius_multiplier, gradient_step=1):
+        radius = self.player.get_radius()
+        size = radius * radius_multiplier
+        mask = pygame.Surface((size, size), pygame.SRCALPHA).convert_alpha()
+        position = self.player.get_pos()
+
+        for r in range(radius, 0, -gradient_step):
+            alpha = int(255 * (r / radius))
+            pygame.draw.circle(mask, (255, 255, 255, alpha), position, r)
+
+        return mask
 
     def run(self):
         """the main game loop"""
@@ -53,6 +75,8 @@ class Game:
             self.handle_events()
             self.update()
             self.draw()
+            self.draw_light()
+            pygame.display.flip()
 
         pygame.quit()
 
@@ -75,4 +99,10 @@ class Game:
         self.screen.fill("black")
         self.floor1.draw(self.player.get_pos())
         self.player.draw()
-        pygame.display.flip()
+
+    def draw_light(self):
+        dark = self.dark_background.copy()
+
+        dark.blit(self.light_mask, (self.screen.get_width()/2, self.screen.get_height()/2), special_flags=pygame.BLEND_RGBA_ADD)
+
+        self.screen.blit(dark, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)

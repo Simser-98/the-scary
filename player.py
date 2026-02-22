@@ -39,6 +39,10 @@ class Player:
         """getter for the position of the player"""
         return self.worldPos
 
+    def get_radius(self):
+        """getter for the radius of the player"""
+        return self.radius
+
     def handle_collisions(self, colliders, player_speed, delta_time):
         """handles collisions with the walls and props in the world"""
         displacement = self.velocity * player_speed * delta_time
