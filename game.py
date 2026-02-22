@@ -37,9 +37,18 @@ class Game:
 
     def run(self):
         """the main game loop"""
+        fps_measurements = []
         while self.running:
             self.deltaTime = self.clock.tick() / 1000
             self.keys = pygame.key.get_pressed()
+
+            fps_measurements.append(self.clock.get_fps())
+            if len(fps_measurements) > 1000:
+                fps_measurements.remove(fps_measurements[0])
+            fps_sum = 0
+            for i in fps_measurements:
+                fps_sum += i
+            pygame.display.set_caption("fps: " + str(fps_sum / len(fps_measurements)))
 
             self.handle_events()
             self.update()
@@ -59,7 +68,7 @@ class Game:
 
     def update(self):
         """updates the game state"""
-        self.player.update()
+        self.player.update(self.floor1.get_colliders())
 
     def draw(self):
         """draws the game to the screen"""

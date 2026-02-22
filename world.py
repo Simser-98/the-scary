@@ -10,7 +10,7 @@ class World:
         self.props = []
         self.floor = floor
 
-    def get_collisions(self):
+    def get_colliders(self):
         """returns a list of all the walls and props in the world for collision detection"""
         return self.walls + [pygame.Rect(prop.get_pos().x, prop.get_pos().y,
                                         prop.get_dimensions().x, prop.get_dimensions().y) for prop in self.props]
@@ -31,6 +31,7 @@ class World:
                 print(row)
 
     def draw(self, player_pos):
+        """draws the walls and props to the screen relative to the player's position"""
         screen = self.game.get_screen()
         for wall in self.walls:
             pygame.draw.rect(screen, "white",
