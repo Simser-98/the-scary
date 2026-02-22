@@ -1,17 +1,33 @@
 import pygame
 import math
 
+from pygame import rect
+
+
+def clamp(value, min_value, max_value):
+    """clamps a value between a minimum and maximum value"""
+    return max(min_value, min(value, max_value))
+
+def circle_rect_collides(circle_pos, radius, rectangle):
+    """checks for collision between a circle and a rectangle"""
+    closest_x = clamp(circle_pos.x, rectangle.left, rectangle.right)
+    closest_y = clamp(circle_pos.y, rectangle.top, rectangle.bottom)
+
+    distance_x = circle_pos.x - closest_x
+    distance_y = circle_pos.y - closest_y
+
+    distance_squared = distance_x ** 2 + distance_y ** 2
+    return distance_squared < radius ** 2
+
 
 class Player:
     """the player class"""
     def __init__(self, game):
         self.game = game
-        self.worldPos = pygame.Vector2(0, 0)
+        self.worldPos = pygame.Vector2(100, 100)
         self.velocity = pygame.Vector2(0, 0)
         self.speed = 75
         self.radius = 25
-        self.rect = pygame.Rect(self.worldPos.x - self.radius, self.worldPos.y - self.radius,
-                                self.radius * 2, self.radius * 2)
 
         # stanima
         self.staminaMax = 100
@@ -24,7 +40,45 @@ class Player:
         """getter for the position of the player"""
         return self.worldPos
 
-    def update(self):
+    def handle_collisions(self, colliders, player_speed, delta_time):
+        """handles collisions with the walls and props in the world"""
+        displacement = self.velocity * player_speed * delta_time
+
+        temp_pos = self.worldPos + displacement
+
+        search_rect = pygame.Rect(
+            temp_pos.x - self.radius * 2 + displacement.x,
+            temp_pos.y - self.radius * 2 + displacement.y,
+            self.radius * 4,
+            self.radius * 4
+        )
+
+        for collider in colliders:
+            if not collider.colliderect(search_rect):
+                continue
+
+            if circle_rect_collides(temp_pos, self.radius, collider):
+                closest_x = clamp(temp_pos.x, collider.left, collider.right)
+                closest_y = clamp(temp_pos.y, collider.top, collider.bottom)
+
+                distance_x = closest_x - temp_pos.x
+                distance_y = closest_y - temp_pos.y
+                if abs(distance_x) < abs(distance_y):
+                    if displacement.y != 0:
+                        temp_pos.y = self.worldPos.y
+                    else:
+                        overlap_y = math.sqrt(self.radius ** 2 - distance_x ** 2) - abs(distance_y)
+                        temp_pos.y -= overlap_y * (1 if distance_y > 0 else -1)
+                else:
+                    if displacement.x != 0:
+                        temp_pos.x = self.worldPos.x
+                    else:
+                        overlap_x = math.sqrt(self.radius ** 2 - distance_y ** 2) - abs(distance_x)
+                        temp_pos.x -= overlap_x * (1 if distance_x > 0 else -1)
+
+        self.worldPos = temp_pos
+
+    def update(self, colliders):
         """handles movement and drawing the player to the screen"""
         delta_time = self.game.get_delta_time()
         keys = self.game.get_keys()
@@ -39,7 +93,7 @@ class Player:
             self.velocity.x += 1
 
         if self.velocity.length() != 0:
-            self.velocity.normalize()
+            self.velocity = self.velocity.normalize()
             player_speed = self.speed
             if self.stamina > 0 and keys[pygame.K_LSHIFT]:
                 player_speed *= self.sprintMultiplier
@@ -48,11 +102,8 @@ class Player:
             elif self.stamina < 100:
                 self.stamina += self.staminaRegain * delta_time
                 if self.stamina >= 100: self.stamina = 100
-            self.worldPos += self.velocity * player_speed * delta_time
-            self.rect = pygame.Rect(self.worldPos.x - self.radius, self.worldPos.y - self.radius,
-                                    self.radius * 2, self.radius * 2)
 
-        print(self.stamina)
+            self.handle_collisions(colliders, player_speed, delta_time)
 
     def draw(self):
         """draws the player on the screen"""
@@ -60,6 +111,3 @@ class Player:
         pygame.draw.circle(screen, "white",
                            (screen.get_width() / 2, screen.get_height() / 2),
                            25)
-        pygame.draw.rect(screen, "red", (self.rect.x - self.worldPos.x + screen.get_width() / 2,
-                              self.rect.y - self.worldPos.y + screen.get_height() / 2,
-                              self.rect.width, self.rect.height))
