@@ -8,7 +8,14 @@ class Player:
         self.game = game
         self.worldPos = pygame.Vector2(0, 0)
         self.velocity = pygame.Vector2(0, 0)
-        self.speed = 100
+        self.speed = 75
+
+        # stanima
+        self.staminaMax = 100
+        self.stamina = self.staminaMax
+        self.staminaDrain = 20
+        self.staminaRegain = 10
+        self.sprintMultiplier = 2.5
 
     def get_pos(self):
         """getter for the position of the player"""
@@ -30,7 +37,17 @@ class Player:
 
         if self.velocity.length() != 0:
             self.velocity.normalize()
-            self.worldPos += self.velocity * self.speed * delta_time
+            player_speed = self.speed
+            if self.stamina > 0 and keys[pygame.K_LSHIFT]:
+                player_speed *= self.sprintMultiplier
+                self.stamina -= self.staminaDrain * delta_time
+                if self.stamina <= 0: self.stamina = 0
+            elif self.stamina < 100:
+                self.stamina += self.staminaRegain * delta_time
+                if self.stamina >= 100: self.stamina = 100
+            self.worldPos += self.velocity * player_speed * delta_time
+
+        print(self.stamina)
 
     def draw(self):
         """draws the player on the screen"""
