@@ -1,5 +1,8 @@
 import pygame
+
 from player import Player
+from world import World
+
 
 class Game:
     """the main game class"""
@@ -9,10 +12,12 @@ class Game:
         self.screen = pygame.display.set_mode((800, 600))
         self.clock = pygame.time.Clock()
         self.running = True
-        self.delta_time = 0
+        self.deltaTime = 0
         self.keys = pygame.key.get_pressed()
 
         self.player = Player(self)
+        self.floor1 = World(self)
+        self.floor1.setup()
 
     def get_screen(self):
         """getter for the screen surface"""
@@ -24,7 +29,7 @@ class Game:
 
     def get_delta_time(self):
         """getter for the delta time since the last frame"""
-        return self.delta_time
+        return self.deltaTime
 
     def get_keys(self):
         """getter for the current state of the keyboard"""
@@ -33,7 +38,7 @@ class Game:
     def run(self):
         """the main game loop"""
         while self.running:
-            self.delta_time = self.clock.tick() / 1000
+            self.deltaTime = self.clock.tick() / 1000
             self.keys = pygame.key.get_pressed()
 
             self.handle_events()
@@ -59,5 +64,6 @@ class Game:
     def draw(self):
         """draws the game to the screen"""
         self.screen.fill("black")
+        self.floor1.draw(self.player.get_pos())
         self.player.draw()
         pygame.display.flip()
