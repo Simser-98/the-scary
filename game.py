@@ -56,6 +56,12 @@ class Game:
 
         pygame.quit()
 
+    def handle_interaction(self):
+        """handles the player interaction with items"""
+        for item in self.floor1.items:
+            if item.check_distance:
+                self.player.add_item(item)
+                self.floor1.items.remove(item)
 
     def handle_events(self):
         """handles user input and other events"""
@@ -64,6 +70,9 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_e:
+                    self.handle_interaction()
 
 
     def update(self):

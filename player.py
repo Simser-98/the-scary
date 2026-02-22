@@ -1,7 +1,7 @@
 import math
 
 import pygame
-
+from world import World
 
 def clamp(value, min_value, max_value):
     """clamps a value between a minimum and maximum value"""
@@ -25,7 +25,7 @@ class Player:
         self.game = game
         self.worldPos = pygame.Vector2(100, 100)
         self.velocity = pygame.Vector2(0, 0)
-        self.speed = 75
+        self.speed = 200
         self.radius = 25
 
         # stanima
@@ -35,9 +35,14 @@ class Player:
         self.staminaRegain = 10
         self.sprintMultiplier = 2.5
 
+        self.inventory = []
+
     def get_pos(self):
         """getter for the position of the player"""
         return self.worldPos
+
+    def add_item(self, item_id):
+        self.inventory.append(item_id)
 
     def handle_collisions(self, colliders, player_speed, delta_time):
         """handles collisions with the walls and props in the world"""
@@ -88,7 +93,7 @@ class Player:
         self.worldPos = temp_pos
 
     def update(self, colliders):
-        """handles movement and drawing the player to the screen"""
+        """handles movement and drawing the player to the screen."""
         delta_time = self.game.get_delta_time()
         print(self.stamina)
         keys = self.game.get_keys()
