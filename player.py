@@ -1,7 +1,6 @@
-import pygame
 import math
 
-from pygame import rect
+import pygame
 
 
 def clamp(value, min_value, max_value):
@@ -63,24 +62,35 @@ class Player:
 
                 distance_x = closest_x - temp_pos.x
                 distance_y = closest_y - temp_pos.y
-                if abs(distance_x) < abs(distance_y):
-                    if displacement.y != 0:
+                resolve_on_y = abs(distance_x) < abs(distance_y)
+                if resolve_on_y:
+                    primary_distance = distance_y
+                    secondary_distance = distance_x
+                    primary_displacement = displacement.y
+                else:
+                    primary_distance = distance_x
+                    secondary_distance = distance_y
+                    primary_displacement = displacement.x
+                if primary_displacement != 0:
+                    if resolve_on_y:
                         temp_pos.y = self.worldPos.y
                     else:
-                        overlap_y = math.sqrt(self.radius ** 2 - distance_x ** 2) - abs(distance_y)
-                        temp_pos.y -= overlap_y * (1 if distance_y > 0 else -1)
-                else:
-                    if displacement.x != 0:
                         temp_pos.x = self.worldPos.x
+                else:
+                    overlap = math.sqrt(self.radius ** 2 - secondary_distance ** 2) - abs(primary_distance)
+                    correction = overlap * (1 if primary_distance > 0 else -1)
+
+                    if resolve_on_y:
+                        temp_pos.y -= correction
                     else:
-                        overlap_x = math.sqrt(self.radius ** 2 - distance_y ** 2) - abs(distance_x)
-                        temp_pos.x -= overlap_x * (1 if distance_x > 0 else -1)
+                        temp_pos.x -= correction
 
         self.worldPos = temp_pos
 
     def update(self, colliders):
         """handles movement and drawing the player to the screen"""
         delta_time = self.game.get_delta_time()
+        print(self.stamina)
         keys = self.game.get_keys()
         self.velocity = pygame.Vector2(0, 0)
         if keys[pygame.K_w]:
@@ -104,6 +114,10 @@ class Player:
                 if self.stamina >= 100: self.stamina = 100
 
             self.handle_collisions(colliders, player_speed, delta_time)
+
+        elif self.stamina < 100:
+            self.stamina += self.staminaRegain * delta_time
+            if self.stamina >= 100: self.stamina = 100
 
     def draw(self):
         """draws the player on the screen"""
