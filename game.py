@@ -16,7 +16,7 @@ class Game:
         self.keys = pygame.key.get_pressed()
 
         self.player = Player(self)
-        self.floor1 = World(self)
+        self.floor1 = World(self, "floors/floor_1.csv")
         self.floor1.setup()
 
     def get_screen(self):
