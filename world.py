@@ -28,7 +28,6 @@ class World:
                     self.walls.append(pygame.Rect(float(row[1]), float(row[2]), float(row[3]), float(row[4])))
                 else:
                     self.props.append(Prop(pygame.Vector2(float(row[1]), float(row[2])),pygame.Vector2(float(row[3]), float(row[4]))))
-                print(row)
 
     def draw(self, player_pos):
         """draws the walls and props to the screen relative to the player's position"""

@@ -2,6 +2,8 @@ import pygame
 
 from player import Player
 from world import World
+from lightManager import LightManager
+from light import Light
 
 
 class Game:
@@ -20,8 +22,9 @@ class Game:
         self.floor1 = World(self, "floors/floor_1.csv")
         self.floor1.setup()
 
-        self.dark_background = self.make_dark_background()
-        self.light_mask = self.make_light_mask(2)
+        self.light_manager = LightManager(self, ambient_color=(0,0,0))
+        self.light_manager.add_light(Light(self, self.player.get_radius(), self.player.get_pos(),
+                                           200, color=(127, 127, 127), bind_to_player=True))
 
     def get_screen(self):
         """getter for the screen surface"""
@@ -75,8 +78,6 @@ class Game:
             self.handle_events()
             self.update()
             self.draw()
-            self.draw_light()
-            pygame.display.flip()
 
         pygame.quit()
 
@@ -100,9 +101,6 @@ class Game:
         self.floor1.draw(self.player.get_pos())
         self.player.draw()
 
-    def draw_light(self):
-        dark = self.dark_background.copy()
+        self.light_manager.render(self.player.get_pos())
 
-        dark.blit(self.light_mask, (self.screen.get_width()/2, self.screen.get_height()/2), special_flags=pygame.BLEND_RGBA_ADD)
-
-        self.screen.blit(dark, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+        pygame.display.flip()
