@@ -9,6 +9,11 @@ class World:
         self.walls = []
         self.props = []
 
+    def get_collisions(self):
+        """returns a list of all the walls and props in the world for collision detection"""
+        return self.walls + [pygame.Rect(prop.get_pos().x, prop.get_pos().y,
+                                        prop.get_dimensions().x, prop.get_dimensions().y) for prop in self.props]
+
     def setup(self):
         """sets up the world with walls and props"""
         self.walls.append(pygame.Rect(0, 0, 800, 20))

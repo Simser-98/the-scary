@@ -9,6 +9,9 @@ class Player:
         self.worldPos = pygame.Vector2(0, 0)
         self.velocity = pygame.Vector2(0, 0)
         self.speed = 75
+        self.radius = 25
+        self.rect = pygame.Rect(self.worldPos.x - self.radius, self.worldPos.y - self.radius,
+                                self.radius * 2, self.radius * 2)
 
         # stanima
         self.staminaMax = 100
@@ -46,6 +49,8 @@ class Player:
                 self.stamina += self.staminaRegain * delta_time
                 if self.stamina >= 100: self.stamina = 100
             self.worldPos += self.velocity * player_speed * delta_time
+            self.rect = pygame.Rect(self.worldPos.x - self.radius, self.worldPos.y - self.radius,
+                                    self.radius * 2, self.radius * 2)
 
         print(self.stamina)
 
@@ -55,3 +60,6 @@ class Player:
         pygame.draw.circle(screen, "white",
                            (screen.get_width() / 2, screen.get_height() / 2),
                            25)
+        pygame.draw.rect(screen, "red", (self.rect.x - self.worldPos.x + screen.get_width() / 2,
+                              self.rect.y - self.worldPos.y + screen.get_height() / 2,
+                              self.rect.width, self.rect.height))
