@@ -1,7 +1,7 @@
 import math
 
 import pygame
-from world import World
+
 
 def clamp(value, min_value, max_value):
     """clamps a value between a minimum and maximum value"""
