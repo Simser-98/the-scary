@@ -4,6 +4,7 @@ from player import Player
 from world import World
 from lightManager import LightManager
 from light import Light
+from coneLight import ConeLight
 
 
 class Game:
@@ -24,7 +25,9 @@ class Game:
 
         self.light_manager = LightManager(self, ambient_color=(0,0,0))
         self.light_manager.add_light(Light(self, self.player.get_radius(), self.player.get_pos(),
-                                           200, color=(127, 127, 127), bind_to_player=True, step=1))
+                                           200, color=(127, 127, 127), bind_to_player=True))
+        self.light_manager.add_light(ConeLight(self, self.player.get_radius(), self.player.get_pos(),
+                                               400, color=(200, 200, 200), bind_to_player=True))
 
     def get_screen(self):
         """getter for the screen surface"""
@@ -97,9 +100,23 @@ class Game:
 
     def draw(self):
         """draws the game to the screen"""
-        self.screen.fill("black")
+        self.screen.fill((96, 59, 42))
         self.floor1.draw(self.player.get_pos())
         self.player.draw()
+
+        # radius = 400
+        # player_radius = 25
+        # direction = 0
+        # angle_steps = 6
+        # angle_step = 5
+        # draw_color = (255, 255, 255, 255)
+
+        # origin_point = pygame.Vector2(radius, 0).rotate(direction) + pygame.Vector2(25, self.screen.get_height()/2)
+        # point = pygame.Vector2(400 - player_radius, 0).rotate(direction)
+        # cone_points = [origin_point, point + origin_point]
+        # for a in range(1, angle_steps):
+        #     cone_points.append(point.rotate(a * angle_step) + origin_point)
+        # pygame.draw.polygon(self.screen, draw_color, cone_points)
 
         self.light_manager.render(self.player.get_pos())
 

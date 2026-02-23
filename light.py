@@ -5,15 +5,20 @@ def create_radial_surface(radius, player_radius, color, step):
     surface = pygame.Surface((size, size), pygame.SRCALPHA).convert_alpha()
 
     for r in range(radius, player_radius, -max(1, step)):
-        brightness = (-(r / radius) + 1) ** 4
-        alpha_value = int(255 * brightness)
-        draw_color = (int(color[0] * brightness),
-                      int(color[1] * brightness),
-                      int(color[2] * brightness),
-                      alpha_value)
+        draw_color = calculate_color(r, radius, color)
         pygame.draw.circle(surface, draw_color, (radius, radius), r)
 
     return surface
+
+def calculate_color(r, radius, color):
+    brightness = (-(r / radius) + 1) ** 4
+    alpha_value = int(255 * brightness)
+    draw_color = (int(color[0] * brightness),
+                  int(color[1] * brightness),
+                  int(color[2] * brightness),
+                  alpha_value)
+
+    return draw_color
 
 class Light:
     def __init__(self, game, player_radius, world_pos, radius, color=(255,255,255), bind_to_player=False, step=1):
