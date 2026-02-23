@@ -27,7 +27,7 @@ class Game:
         self.light_manager.add_light(Light(self, self.player.get_radius(), self.player.get_pos(),
                                            200, color=(127, 127, 127), bind_to_player=True))
         self.light_manager.add_light(ConeLight(self, self.player.get_radius(), self.player.get_pos(),
-                                               400, 45, color=(200, 200, 200), bind_to_player=True))
+                                               600, 45, bind_to_player=True))
 
     def get_screen(self):
         """getter for the screen surface"""
@@ -52,6 +52,10 @@ class Game:
         return surface
 
     def make_light_mask(self, radius_multiplier, gradient_step=1):
+        """
+        creates a circular light mask surface with a radial gradient
+        based on the player's radius and the specified multiplier
+        """
         radius = self.player.get_radius()
         size = radius * radius_multiplier
         mask = pygame.Surface((size, size), pygame.SRCALPHA).convert_alpha()

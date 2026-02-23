@@ -3,6 +3,7 @@ import pygame, math
 from light import Light, calculate_color
 
 def create_cone_surface(radius, player_radius, direction, spread, color, angle_step, radius_step):
+    """creates a surface with a cone-shaped light gradient"""
     size = radius * 2
     surface = pygame.Surface((size, size), pygame.SRCALPHA).convert_alpha()
     angle_step = max(1, angle_step)
@@ -22,28 +23,45 @@ def create_cone_surface(radius, player_radius, direction, spread, color, angle_s
 
 
 class ConeLight(Light):
+    """a light that emits in a cone shape, with a specified direction and spread angle"""
     def __init__(self, game, player_radius, world_pos, radius, spread,
                  direction=0, angle_step=1, **kwargs):
+        """
+        initializes the cone light with the specified parameters
+        and pre-rotates the surface for faster rendering
+        """
         super().__init__(game, player_radius, world_pos, radius, **kwargs)
         self.spread = spread
         self.direction = direction
 
         self.rotation_cache = {}
-        self.cache_step = 1
+        self.cache_step = 5
 
         self.surface = create_cone_surface(radius, player_radius, direction, spread,
                                            self.color, angle_step, kwargs["step"] if "step" in kwargs else 1)
         self.bake_angles()
 
     def bake_angles(self):
+        """
+        pre-rotates the cone surface at regular angle intervals
+        and stores them in a cache for faster rendering
+        """
         for (angle) in range(0, 360, max(1, self.cache_step)):
             self.rotation_cache[angle] = pygame.transform.rotate(self.surface, -angle)
 
     def set_direction(self, direction):
+        """
+        sets the direction of the cone light and updates the
+        surface to the pre-rotated version from the cache
+        """
         self.direction = direction % 360
         self.surface = self.get_rotated()
 
     def get_rotated(self):
+        """
+        returns the pre-rotated surface from the cache based
+        on the current direction, or rotates it if not in the cache
+        """
         key = int(round(self.direction / self.cache_step) * self.cache_step) % 360
         surface = self.rotation_cache.get(key)
         if surface is None:

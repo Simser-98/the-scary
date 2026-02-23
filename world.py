@@ -4,7 +4,12 @@ from prop import Prop
 
 
 class World:
+    """
+    the world class is responsible for managing the walls
+    and props in the game and drawing them to the screen
+    """
     def __init__(self, game, floor):
+        """initializes the world with a reference to the game and the floor file"""
         self.game = game
         self.walls = []
         self.props = []
