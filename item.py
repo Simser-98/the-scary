@@ -2,8 +2,9 @@ import pygame
 
 
 class Item:
-
+    """a class for items in the world that the player can interact with"""
     def __init__(self, item_id, world_pos, radius):
+        """initializes the item with an id, position and radius for interaction"""
         self.itemId = item_id
         self.worldPos = world_pos
         self.radius = radius
