@@ -58,10 +58,10 @@ class Game:
 
     def handle_interaction(self):
         """handles the player interaction with items"""
-        for item in self.floor1.items:
-            if item.check_distance:
+        for item in self.floor1.get_items():
+            if item.check_distance(self.player.get_pos(), self.player.get_radius()):
                 self.player.add_item(item)
-                self.floor1.items.remove(item)
+                self.floor1.remove_item(item)
 
     def handle_events(self):
         """handles user input and other events"""

@@ -22,10 +22,7 @@ class Item:
 
     def check_distance(self, player_pos, player_radius):
         """checks if the prop is within radius of player"""
-        vector_magnitude = (player_pos.x - self.worldPos[0]) ** 2 + (player_pos.y - self.worldPos[1]) ** 2
+        vector_magnitude = pygame.Vector2.length(player_pos - self.worldPos)
 
-        if vector_magnitude < player_radius + self.radius:
-            return True
-        else:
-            return False
+        return vector_magnitude < player_radius + self.radius
 

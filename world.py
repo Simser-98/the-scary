@@ -23,6 +23,10 @@ class World:
         """returns a list of all the items in the world for collision detection"""
         return self.items
 
+    def remove_item(self, item):
+        """removes the item from the world"""
+        self.items.remove(item)
+
     def setup(self):
         """sets up the world with walls, props and items"""
         with open(self.floor, "r") as f:
