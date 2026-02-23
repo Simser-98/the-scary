@@ -25,7 +25,7 @@ class Player:
         self.game = game
         self.worldPos = pygame.Vector2(100, 100)
         self.velocity = pygame.Vector2(0, 0)
-        self.speed = 200
+        self.speed = 75
         self.radius = 25
 
         # stanima
@@ -100,7 +100,6 @@ class Player:
     def update(self, colliders):
         """handles movement and drawing the player to the screen."""
         delta_time = self.game.get_delta_time()
-        #print(self.stamina)
         keys = self.game.get_keys()
         self.velocity = pygame.Vector2(0, 0)
         if keys[pygame.K_w]:
