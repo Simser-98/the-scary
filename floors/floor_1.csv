@@ -1,18 +1,18 @@
 Item,X,Y,Width,Height
-coffee table,165,105,126,59
-arm chair 1,430,35,85,68
-arm chair  2,430,132,85,68
-couch,86,220,284,80
-toilet,888,49,80,60
-stairs,927,4,285,145
-dinner table,690,470,340,134
-kitchen table,770,347,386,63
-fridge,1167,346,114,61
-paper bin,1249,486,32,50
-plastic bin,1249,545,32,50
-bin,1242,636,33,59
-pantry,1098,630,131,72
-round table,492,586,97,97
+prop coffee table,165,105,126,59
+prop arm chair 1,430,35,85,68
+prop arm chair  2,430,132,85,68
+prop couch,86,220,284,80
+prop toilet,888,49,80,60
+prop stairs,927,4,285,145
+prop dinner table,690,470,340,134
+prop kitchen table,770,347,386,63
+prop fridge,1167,346,114,61
+prop paper bin,1249,486,32,50
+prop plastic bin,1249,545,32,50
+prop bin,1242,636,33,59
+prop pantry,1098,630,131,72
+prop round table,492,586,97,97
 wall garden,0,0,5,700
 wall back,0,0,1840,5
 wall outside shed,1433,340,407,5
@@ -27,3 +27,4 @@ wall front toilet l,893,140,74,5
 wall hall,762,343,550,5
 wall kitchen lip,762,343,5,73
 wall back shed,1835,0,5,340
+item_001,690,470,50,50

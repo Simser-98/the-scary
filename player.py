@@ -35,9 +35,19 @@ class Player:
         self.staminaRegain = 10
         self.sprintMultiplier = 2.5
 
+        self.inventory = []
+
     def get_pos(self):
         """getter for the position of the player"""
         return self.worldPos
+
+    def get_radius(self):
+        """getter for the radius of the player"""
+        return self.radius
+
+    def add_item(self, item_id):
+        """adds item to the player inventory"""
+        self.inventory.append(item_id)
 
     def handle_collisions(self, colliders, player_speed, delta_time):
         """handles collisions with the walls and props in the world"""
@@ -88,9 +98,8 @@ class Player:
         self.worldPos = temp_pos
 
     def update(self, colliders):
-        """handles movement and drawing the player to the screen"""
+        """handles movement and drawing the player to the screen."""
         delta_time = self.game.get_delta_time()
-        print(self.stamina)
         keys = self.game.get_keys()
         self.velocity = pygame.Vector2(0, 0)
         if keys[pygame.K_w]:

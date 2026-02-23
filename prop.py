@@ -1,4 +1,4 @@
-import pygame
+
 
 class Prop:
     def __init__(self, world_pos, dimensions):
