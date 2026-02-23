@@ -1,7 +1,6 @@
 import pygame
 import csv
 
-import prop
 from prop import Prop
 from item import Item
 
