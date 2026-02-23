@@ -11,7 +11,7 @@ def create_radial_surface(radius, player_radius, color, step):
     return surface
 
 def calculate_color(r, radius, color):
-    brightness = (-(r / radius) + 1) ** 4
+    brightness = (-(r / radius) + 1) ** 5
     alpha_value = int(255 * brightness)
     draw_color = (int(color[0] * brightness),
                   int(color[1] * brightness),

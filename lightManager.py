@@ -8,6 +8,9 @@ class LightManager:
 
         self.light_map = pygame.Surface(self.game.screen.get_size(), pygame.SRCALPHA).convert_alpha()
 
+    def get_lights(self):
+        return self.lights
+
     def add_light(self, light):
         self.lights.append(light)
 
