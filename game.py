@@ -24,7 +24,7 @@ class Game:
 
         self.light_manager = LightManager(self, ambient_color=(0,0,0))
         self.light_manager.add_light(Light(self, self.player.get_radius(), self.player.get_pos(),
-                                           200, color=(127, 127, 127), bind_to_player=True))
+                                           200, color=(127, 127, 127), bind_to_player=True, step=1))
 
     def get_screen(self):
         """getter for the screen surface"""
