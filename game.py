@@ -44,7 +44,7 @@ class Game:
         """getter for the current state of the keyboard"""
         return self.keys
 
-    def make_dark_background(self, alpha=255):
+    def make_dark_background(self):
         """creates a dark background surface with the specified alpha value"""
         surface = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA).convert_alpha()
         surface.fill((0, 0, 0))
