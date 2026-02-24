@@ -13,7 +13,7 @@ def create_radial_surface(radius, player_radius, color, step):
 
 def calculate_color(r, radius, color):
     """calculates the color and alpha value for a given distance from the center of the light"""
-    brightness = (-(r / radius) + 1) ** 5
+    brightness = (-(r / radius) + 1) ** 6
     alpha_value = int(255 * brightness)
     draw_color = (int(color[0] * brightness),
                   int(color[1] * brightness),

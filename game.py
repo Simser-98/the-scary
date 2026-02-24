@@ -13,7 +13,6 @@ class Game:
         """initializes pygame and sets up the game window and clock"""
         pygame.init()
         self.screen = pygame.display.set_mode((800, 600))
-
         self.clock = pygame.time.Clock()
         self.running = True
         self.deltaTime = 0
@@ -27,7 +26,7 @@ class Game:
         self.light_manager.add_light(Light(self, self.player.get_radius(), self.player.get_pos(),
                                            200, color=(127, 127, 127), bind_to_player=True))
         self.light_manager.add_light(ConeLight(self, self.player.get_radius(), self.player.get_pos(),
-                                               600, 45, bind_to_player=True))
+                                               500, 45, cache_angles=True, bind_to_player=True))
 
     def get_screen(self):
         """getter for the screen surface"""
@@ -94,7 +93,7 @@ class Game:
         # poll for events
         # pygame.QUIT event means the user clicked X to close your window
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 self.running = False
 
 

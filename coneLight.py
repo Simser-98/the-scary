@@ -25,7 +25,7 @@ def create_cone_surface(radius, player_radius, direction, spread, color, angle_s
 class ConeLight(Light):
     """a light that emits in a cone shape, with a specified direction and spread angle"""
     def __init__(self, game, player_radius, world_pos, radius, spread,
-                 direction=0, angle_step=1, **kwargs):
+                 direction=0, angle_step=1, cache_angles=False, **kwargs):
         """
         initializes the cone light with the specified parameters
         and pre-rotates the surface for faster rendering
@@ -35,13 +35,14 @@ class ConeLight(Light):
         self.direction = direction
 
         self.rotation_cache = {}
-        self.cache_step = 5
+        self.cache_step = 3
 
         self.surface = create_cone_surface(radius, player_radius, direction, spread,
                                            self.color, angle_step, kwargs["step"] if "step" in kwargs else 1)
-        self.bake_angles()
 
-    def bake_angles(self):
+        if cache_angles: self.cache_angles()
+
+    def cache_angles(self):
         """
         pre-rotates the cone surface at regular angle intervals
         and stores them in a cache for faster rendering
